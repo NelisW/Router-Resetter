@@ -181,7 +181,10 @@ void publishStateMQTT();
 #define LED_BUILTIN D4 // Pin D4 mapped to pin GPIO2/TXD1 of ESP8266, NodeMCU and WeMoS, control on-board LED
 #endif
 
+//Input pin
 #define Switch_Pin 4 // D2 GPIO04, held low, switch (to +Vcc) to activate
+
+//Output pins
 #define RELAY_Pin 5  // D1 GPIO05, 'S' on the relay 
 
 #define LED_WAIT_Pin 14 // D5 GPIO14, blue  LED power up & waiting
@@ -290,6 +293,7 @@ void setVarsMQTT(char *payload, unsigned int length)
   // Payload:
   // S,DELAY_FOR_COMMS,DELAY_WAIT_POWER_DOWN,DELAY_WAIT_MODEM_POWER_UP,PingPeriod,StateReportPeriod,MQTTReconnectPeriod,MaxNumPingFails,
 
+  //on reboot the hardcoded values will be used. There is no memory of changed variables.
   int vint;
   strPayload.clear();
   tokenfield.clear();
