@@ -1,6 +1,22 @@
 # Router-Resetter
 
-ESP8266 code to power cycle a router if three different website pings all fails. Integrates with Home Assistant (HA) with auto-discovery via MQTT. Developed using the Arduino framework in PlatformIO.
+ESP8266 code to power cycle a router if three different website pings all fails. Integrates with Home Assistant (HA) with auto-discovery via MQTT. Developed using the Arduino framework 
+
+The ESP pings three different web sites every ten seconds. If all three sites do not return replies for four tries (40 seconds), it is assumed that the internet is not connected and the power cycle is initiated. Power is down for some time, and then the ESP waits for a reconnect period before testing pings. The ESP is reboot every day.   Times are as follows: 
+
+   // ESP8266 times in milliseconds
+   #define second 1000
+   #define minute 60000
+   unsigned long DELAY_FOR_COMMS = 1 * second;           // wait for whatever on network (1)
+   unsigned long DELAY_WAIT_POWER_DOWN = 30 * second;     // this long no power (60)
+   unsigned long DELAY_WAIT_MODEM_POWER_UP = 150* second;   // wait for fibre and wifi network stable (300)
+   unsigned long PingPeriod = 10 * second;                // how long between pings (120))
+   unsigned long StateReportPeriod = 1 * second;
+   unsigned long MQTTReconnectPeriod = 5 * second;
+   unsigned long REBOOT_DELAY_MS = 24ul * 60 * 60 * 1000; // one day in mS (86 400 000)
+
+   unsigned long MaxNumPingFails = 4; // how many times must ping fail before reset
+
 
 ## Background
 
