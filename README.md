@@ -17,6 +17,14 @@ The ESP pings three different web sites every ten seconds. If all three sites do
 
       unsigned long MaxNumPingFails = 4; // how many times must ping fail before reset
 
+The state is displayed on three LEDS. LED_ON is low, so LED output pin is connected to +Vcc via a suitable resistor. The states are as follows:
+
+1. LED_WAIT (blue)  power up & waiting for ping respond
+1. LED_PING (green) ping successful
+1. LED_DOWN (red) power out output relay is down
+
+The relay normally-closed contacts are used, hence the relay is not consuming power and the system fails safe (keeping power on the output).
+
 ## Enclosure 
 
 See https://www.printables.com/model/987325/
