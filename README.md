@@ -37,19 +37,7 @@ This solution uses MQTT to integrate with HA, so that you can check the status o
 
 The device responds to MQTT from any pub/sub client, it does not have to be HA. So you can control the resetter from any MQTT friendly application (or the command line).
 
-I used the following sources in putting together this solution:
-
-1. [make-an-automatic-router-re-starter](http://www.whatimade.today/make-an-automatic-router-re-starter-for-3-with-an-esp8266-01-and-single-relay/)  
-1. [NodeMCU-Internet-Hardware-WatchDog](https://www.instructables.com/NodeMCU-Internet-Hardware-WatchDog/)
-1. [internet-hardware-watchdog-using-nodemcu](https://maker.pro/arduino/projects/internet-hardware-watchdog-using-nodemcu)  
-1. [modem_restarter](https://diyodemag.com/projects/modem_restarter)
-1. [esp8266-auto-router-resetter](https://www.programmingelectronics.com/esp8266-auto-router-resetter-student-project/)
-1. [reconnect-esp8266-nodemcu-to-wifi](https://randomnerdtutorials.com/solved-reconnect-esp8266-nodemcu-to-wifi/)
-1. [ESP8266Ping](https://github.com/dancol90/ESP8266Ping/tree/master)
-1. [help-with-simple-ip-ping-program](https://forum.arduino.cc/t/solved-help-with-simple-ip-ping-program/498296/2)
-
 ## How to set and get wifi secrets:
-[providing-credentials-without-the-keys-being-displayed-in-the-code](https://community.platformio.org/t/providing-credentials-without-the-keys-being-displayed-in-the-code/32437/2)
 
 1. Set the following two windows USER environment variables:
 
@@ -94,63 +82,15 @@ MQTT username and password must sync with value in HA.
       static const char* MQTTUserName     = ENV_MQTTUserName;     // Your ssid
       static const char* MQTTpassword = ENV_MQTTpassword; // Your Password
 
+The Home Assistant MQTT comms is serialised in JSON.
 
-## Serialise with JSON
+The knolleary mqtt pubsub library is used.
 
-https://arduinojson.org/  
-https://arduinojson.org/v7/example/  
-https://arduinojson.org/v7/tutorial/serialization/  
-https://arduinojson.org/v5/example/generator/  
-
+This code uses button in Home Assistant to activate a power cycle, with sensor providing state and info  
 
 ## Set up static IP address
 
-https://randomnerdtutorials.com/esp8266-nodemcu-static-fixed-ip-address-arduino/
-but this requires reserving the IP address in the router.
-
-## knolleary mqtt pubsub library
-
-https://github.com/knolleary/pubsubclient/blob/master/examples/mqtt_esp8266/mqtt_esp8266.ino
-https://github.com/knolleary/pubsubclient/blob/master/examples/mqtt_basic/mqtt_basic.ino
-
-
-## Home Assistant Integration
-
-Manual integration of MQTT device into HA  
-https://resinchemtech.blogspot.com/2023/12/adding-mqtt-devices.html
-
-MQTT Auto discovery in HA general reading    
-https://gist.github.com/Resinchem/ecd86dfb52bd699c79acfa80cd348d7b  
-https://youtu.be/VHiCtZqllU8  
-https://resinchemtech.blogspot.com/2023/12/mqtt-auto-discovery.html  
-https://roelofjanelsinga.com/articles/mqtt-discovery-with-an-arduino/  
-https://mpolinowski.github.io/docs/Automation_and_Robotics/Home_Automation/  2022-07-10-home-assistant-mqtt-autodiscovery-part-i/2022-07-10  
-https://www.home-assistant.io/integrations/sensor.mqtt/  
-
-This code uses button to activate in HA, with sensor providing state and info  
-https://www.home-assistant.io/integrations/button/  
-https://www.home-assistant.io/integrations/button.mqtt/  
-https://www.home-assistant.io/integrations/sensor  
-https://www.home-assistant.io/integrations/sensor.mqtt/  
-
-## Using MQTT on the command line
-
-create the MQTT auto discovery of sensor (make retain to remember)
-
-      mosquitto_pub -h 192.168.68.71 -p 1883 -u "user"  -P "passwd" \
-         -t "homeassistant/sensor/routerreset/config"   \
-         -m "{\"name\": \"garden\", \"unique_id\": \"garden\",\"state_topic\": \"routerreset/state\"}" -r
-
-delete the retained message by sending empty payload (also retain):  
-
-      mosquitto_pub -h 192.168.68.71 -p 1883 -u "user"  -P "passwd" \
-         -t "homeassistant/sensor/routerreset/config"   \
-         -m "" -r
-
-Hint to remove retained message in topic (type this in terminal):  
-https://community.home-assistant.io/t/mqtt-how-to-remove-retained-messages/79029/17  
-
-      mosquitto_pub -h serverIP -p 1883 -u MQTTusername -P MQTTpassword -t topic -r -n
+When you compile the code you can either select static IP address or DHCP.  A static IP address requires reserving the IP address in the router.
 
 ## MQTT topics
 
@@ -175,62 +115,19 @@ https://forum.arduino.cc/t/cant-turn-off-esp8266-dancole90-ping-library-debug-me
 
 SafeString does not cause memory leaks.
 
-https://github.com/PowerBroker2/SafeString?utm_source=platformio&utm_medium=piohome  
-https://www.forward.com.au/pfod/ArduinoProgramming/Serial_IO/index.html  
-https://www.forward.com.au/pfod/ArduinoProgramming/SafeString/index.html#static  
-https://www.forward.com.au/pfod/ArduinoProgramming/SafeString/index.html#Printing  
-https://www.forward.com.au/pfod/ArduinoProgramming/SafeString/SafeString_stoken_Example.ino  
-
 ## Adding Periodic Automatic Reboots
 
 Handling Out-Of-Memory on ESP32 and ESP8266, by adding Periodic Automatic Reboots
-
-https://www.forward.com.au/pfod/ArduinoProgramming/ArduinoStrings/index.html#reboot
-
-`millisDelay` implements a non-blocking, repeatable delay, see the detailed description. 
-    
-To use millisDelay, create a global instance for each delay you need e.g.
-
-            millisDelay ledDelay;
-
-Then start the delay in Setup(), running with with say a 1sec (1000ms) delay i.e.
-
-            ledDelay.start(1000);\
-
-Then in loop() check if the delay has timed out with
-
-      if (ledDelay.justFinished()) {
-         . . .  do stuff here when delay has timed out
-         }
 
 ## OTA
 
 The code does not support OTA updates.
 
-
 ## Hardware
-
-### Relay Keyes_SRly 
-
-http://www.techydiy.org/keyes-sr1y-relay-module/  
-https://arduinomodules.info/ky-019-5v-relay-module/  
-https://www.robotics.org.za/FE-SR1Y  
-Counting from the LED:  
-
-      pin 1 s  connects to pin D1/GPIO5 as input to signal.  
-      pin 2 +  Positive supply, connects to 3V seems to work on 3V only, not 5V  
-      pin 3 -  Negative supply, connects to G  
-
-LED connected to  Pin D7 GPIO13
-
-### Interrupt
-toggle switch interrupt  
-https://www.electronicwings.com/nodemcu/nodemcu-gpio-interrupts-with-arduino-ide  
-https://randomnerdtutorials.com/interrupts-timers-esp8266-arduino-ide-nodemcu/  
 
 ### Pins
 
-      //Input pin
+      //Input pin, hardware activation of the power cycle:
       #define Switch_Pin 4 // D2 GPIO04, held low, switch (to +Vcc) to activate
 
       //Output pins
