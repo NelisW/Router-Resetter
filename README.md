@@ -80,8 +80,8 @@ MQTT username and password must sync with value in HA.
 
 4. use the variables as follows:
 
-      static const char* MQTTUserName     = ENV_MQTTUserName;     // Your ssid
-      static const char* MQTTpassword = ENV_MQTTpassword; // Your Password
+          static const char* MQTTUserName     = ENV_MQTTUserName;     // Your ssid
+          static const char* MQTTpassword = ENV_MQTTpassword; // Your Password
 
 The Home Assistant MQTT comms is serialised in JSON.
 
