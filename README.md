@@ -17,6 +17,9 @@ The ESP pings three different web sites every ten seconds. If all three sites do
 
       unsigned long MaxNumPingFails = 4; // how many times must ping fail before reset
 
+## Enclosure 
+
+See https://www.printables.com/model/987325/
 
 ## Background
 
