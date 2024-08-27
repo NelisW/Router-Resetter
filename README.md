@@ -51,10 +51,11 @@ The device responds to MQTT from any pub/sub client, it does not have to be HA. 
             -I include
             -D ENV_PIO_WIFI_SSID="\"${sysenv.PIO_WIFI_SSID}\""
             -D ENV_PIO_WIFI_PASSWD="\"${sysenv.PIO_WIFI_PASSWD}\""
-3. use the variables as follows:
+   
+4. use the variables as follows:
 
-         static const char* ssid     = ENV_PIO_WIFI_SSID;     // Your ssid
-         static const char* password = ENV_PIO_WIFI_PASSWD; // Your Password
+             static const char* ssid     = ENV_PIO_WIFI_SSID;     // Your ssid
+             static const char* password = ENV_PIO_WIFI_PASSWD; // Your Password
 
 ## MQTT Setup  for HA
 
