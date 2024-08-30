@@ -3,7 +3,7 @@
 ESP8266 code to power cycle a router if three different website pings all fails. Integrates with Home Assistant (HA) with auto-discovery via MQTT. Developed using the Arduino framework 
 
 The ESP pings three different web sites every ten seconds. If all three sites do not return replies for four tries (40 seconds), it is assumed that the internet is not connected and the power cycle is initiated. Power is down for some time, and then the ESP waits for a reconnect period before testing pings. The ESP is reboot every day.   Times are as follows: 
-
+      
       // ESP8266 times in milliseconds
       #define second 1000
       #define minute 60000
