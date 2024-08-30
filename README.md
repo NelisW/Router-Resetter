@@ -19,9 +19,9 @@ The ESP pings three different web sites every ten seconds. If all three sites do
 
 The state is displayed on three LEDS. LED_ON is low, so LED output pin is connected to +Vcc via a suitable resistor. The states are as follows:
 
-1. LED_WAIT (blue)  power up & waiting for ping respond
-1. LED_PING (green) ping successful
-1. LED_DOWN (red) power out output relay is down
+1. LED_DOWN (red) power cycle activated, relay NC is open, no power to ONT and router.
+1. LED_WAIT (blue) power resored, waiting for ONT and router startup, check for ping response.
+1. LED_PING (green) ping successful, repeat at regular intervals.
 
 The relay normally-closed contacts are used, hence the relay is not consuming power and the system fails safe (keeping power on the output).
 
